@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("FixedPointUnitTest")]
+
 namespace Cuni.Arithmetics.FixedPoint
 {
     public class Fixed<Q> where Q:IPrecision
