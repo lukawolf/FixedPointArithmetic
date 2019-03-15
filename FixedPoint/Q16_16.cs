@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public class Q16_16 : IPrecision
+    public sealed class Q16_16 : IPrecision
     {
     }
 }
