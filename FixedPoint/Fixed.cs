@@ -41,7 +41,7 @@ namespace Cuni.Arithmetics.FixedPoint
         {
             var toReturn = new Fixed<Q>(0);
             toReturn.raw = (raw * value.raw) >> afterDot;
-            toReturn.raw = (toReturn.raw << 32) >> 32;
+            toReturn.raw = (toReturn.raw << 32) >> 32; //To simulate overflow as specified in email
             return toReturn;
         }
 
