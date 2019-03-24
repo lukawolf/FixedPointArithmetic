@@ -179,5 +179,41 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
             var converted = (Fixed<Q16_16>)original;
             Assert.AreEqual(original.ToString(), converted.ToString());
         }
+
+        [TestMethod]
+        public void AbsTest()
+        {
+            var aFixed = new Fixed<Q8_24>(a);
+            var bFixed = new Fixed<Q8_24>(-a);
+            Assert.AreEqual(aFixed.Abs().ToString(), bFixed.Abs().ToString());
+        }
+        [TestMethod]
+        public void GreaterThanTest()
+        {
+            var aFixed = new Fixed<Q8_24>(a);
+            var bFixed = new Fixed<Q8_24>(b);
+            Assert.IsFalse(aFixed > bFixed);
+        }
+        [TestMethod]
+        public void LesserThanTest()
+        {
+            var aFixed = new Fixed<Q8_24>(a);
+            var bFixed = new Fixed<Q8_24>(b);
+            Assert.IsTrue(aFixed < bFixed);
+        }
+        [TestMethod]
+        public void EqualsTest()
+        {
+            var aFixed = new Fixed<Q8_24>(a);
+            var bFixed = new Fixed<Q8_24>(a);
+            Assert.IsTrue(aFixed == bFixed);
+        }
+        [TestMethod]
+        public void DoesNotEqualTest()
+        {
+            var aFixed = new Fixed<Q8_24>(a);
+            var bFixed = new Fixed<Q8_24>(b);
+            Assert.IsTrue(aFixed != bFixed);
+        }
     }
 }

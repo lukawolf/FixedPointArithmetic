@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
+    [Obsolete("Fixed class is depreciated. Use FixedStruct instead!")]
     public class Fixed<Q> where Q:IPrecision
     {
         private int raw;
@@ -54,6 +55,14 @@ namespace Cuni.Arithmetics.FixedPoint
         {
             var toReturn = new Fixed<Q>();
             toReturn.raw = (int)(((long)raw << afterDot) / (long)value.raw);
+            return toReturn;
+        }
+
+        public Fixed<Q> Abs()
+        {
+            var toReturn = new Fixed<Q>();
+            toReturn.raw = raw;
+            if (toReturn.raw < 0) toReturn.raw = -toReturn.raw;
             return toReturn;
         }
 
@@ -141,6 +150,22 @@ namespace Cuni.Arithmetics.FixedPoint
         public static Fixed<Q> operator /(Fixed<Q> a, Fixed<Q> b)
         {
             return a.Divide(b);
+        }
+        public static bool operator ==(Fixed<Q> a, Fixed<Q> b)
+        {
+            return a.raw == b.raw;
+        }
+        public static bool operator !=(Fixed<Q> a, Fixed<Q> b)
+        {
+            return a.raw != b.raw;
+        }
+        public static bool operator >(Fixed<Q> a, Fixed<Q> b)
+        {
+            return a.raw > b.raw;
+        }
+        public static bool operator <(Fixed<Q> a, Fixed<Q> b)
+        {
+            return a.raw < b.raw;
         }
     }
 }

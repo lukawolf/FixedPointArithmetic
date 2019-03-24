@@ -15,9 +15,9 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
     public class FixedTests
     {
         readonly int i = 20;
-        readonly int n = 16;
-        readonly Fixed<Q16_16>[,] fixedMatrix;
-        readonly FixedStruct<Q16_16>[,] fixedStructMatrix;
+        readonly int n = 8;
+        readonly Fixed<Q16_16>[][] fixedMatrix;
+        readonly FixedStruct<Q16_16>[][] fixedStructMatrix;
         readonly Fixed<Q24_8> q24 = new Fixed<Q24_8>(101) / 2;
         readonly Fixed<Q16_16> q16 = new Fixed<Q16_16>(101) / 2;
         readonly Fixed<Q8_24> q8 = new Fixed<Q8_24>(101) / 2;
@@ -28,15 +28,17 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
         public FixedTests()
         {
             Random random = new Random();
-            fixedMatrix = new Fixed<Q16_16>[n, n];
-            fixedStructMatrix = new FixedStruct<Q16_16>[n, n];
+            fixedMatrix = new Fixed<Q16_16>[n][];
+            fixedStructMatrix = new FixedStruct<Q16_16>[n][];
             for (int i = 0; i < n; i++)
             {
+                fixedMatrix[i] = new Fixed<Q16_16>[n];
+                fixedStructMatrix[i] = new FixedStruct<Q16_16>[n];
                 for (int j = 0; j < n; j++)
                 {
-                    int randomInt = random.Next();
-                    fixedMatrix[i, j] = randomInt;
-                    fixedStructMatrix[i, j] = randomInt;
+                    int randomInt = random.Next(1, 15);
+                    fixedMatrix[i][j] = randomInt;
+                    fixedStructMatrix[i][j] = randomInt;
                 }
             }
         }
@@ -140,32 +142,69 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
         [Benchmark]
         public void GaussTest()
         {
-            for (int k = 0; k < n; k++)
+            var row = 0;
+            var col = 0;
+            while (row < n && col < n)
             {
-                for (int i = 0; i < n; i++)
+                var maxRow = row;
+                for (int i = row; i < n; i++)               
+                    if (fixedMatrix[i][col].Abs() > fixedMatrix[maxRow][col].Abs()) maxRow = i;
+                
+                if (fixedMatrix[maxRow][col] == 0)
                 {
-                    fixedMatrix[i, k] = fixedMatrix[i, k] / fixedMatrix[k, k];
-                    for (int j = 0; j < n; j++)
-                    {
-                        fixedMatrix[i, j] = fixedMatrix[i, j] - fixedMatrix[i, k] * fixedMatrix[k, j];
-                    }
+                    col++;
+                    continue;
                 }
+
+                var helperRow = fixedMatrix[row];
+                fixedMatrix[row] = fixedMatrix[maxRow];
+                fixedMatrix[maxRow] = helperRow;
+
+                /* Do for all rows below pivot: */
+                for (int i = row + 1; i < n; i++) {
+                    var f = fixedMatrix[i][col] / fixedMatrix[row][col];
+                    fixedMatrix[i][col] = 0;
+                    for (int j = col + 1; j < n; j++)
+                        fixedMatrix[i][j] = fixedMatrix[i][j] - fixedMatrix[row][j] * f;
+                }
+
+              row++;
+              col++;
             }
         }
 
         [Benchmark]
         public void GaussStructTest()
         {
-            for (int k = 0; k < n; k++)
+            var row = 0;
+            var col = 0;
+            while (row < n && col < n)
             {
-                for (int i = 0; i < n; i++)
+                var maxRow = row;
+                for (int i = row; i < n; i++)
+                    if (fixedStructMatrix[i][col].Abs() > fixedStructMatrix[maxRow][col].Abs()) maxRow = i;
+
+                if (fixedStructMatrix[maxRow][col] == 0)
                 {
-                    fixedStructMatrix[i, k] = fixedStructMatrix[i, k] / fixedStructMatrix[k, k];
-                    for (int j = 0; j < n; j++)
-                    {
-                        fixedStructMatrix[i,j] = fixedStructMatrix[i,j] - fixedStructMatrix[i, k] * fixedStructMatrix[k, j];
-                    }
+                    col++;
+                    continue;
                 }
+
+                var helperRow = fixedStructMatrix[row];
+                fixedStructMatrix[row] = fixedStructMatrix[maxRow];
+                fixedStructMatrix[maxRow] = helperRow;
+
+                /* Do for all rows below pivot: */
+                for (int i = row + 1; i < n; i++)
+                {
+                    var f = fixedStructMatrix[i][col] / fixedStructMatrix[row][col];
+                    fixedStructMatrix[i][col] = 0;
+                    for (int j = col + 1; j < n; j++)
+                        fixedStructMatrix[i][j] = fixedStructMatrix[i][j] - fixedStructMatrix[row][j] * f;
+                }
+
+                row++;
+                col++;
             }
         }
     }

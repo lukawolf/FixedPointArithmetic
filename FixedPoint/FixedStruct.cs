@@ -54,6 +54,14 @@ namespace Cuni.Arithmetics.FixedPoint
             return toReturn;
         }
 
+        public FixedStruct<Q> Abs()
+        {
+            var toReturn = new FixedStruct<Q>();
+            toReturn.raw = raw;
+            if (toReturn.raw < 0) toReturn.raw = -toReturn.raw;
+            return toReturn;
+        }
+
         public override string ToString()
         {
             return ((double)this).ToString();
@@ -138,6 +146,22 @@ namespace Cuni.Arithmetics.FixedPoint
         public static FixedStruct<Q> operator /(FixedStruct<Q> a, FixedStruct<Q> b)
         {
             return a.Divide(b);
+        }
+        public static bool operator ==(FixedStruct<Q> a, FixedStruct<Q> b)
+        {
+            return a.raw == b.raw;
+        }
+        public static bool operator !=(FixedStruct<Q> a, FixedStruct<Q> b)
+        {
+            return a.raw != b.raw;
+        }
+        public static bool operator >(FixedStruct<Q> a, FixedStruct<Q> b)
+        {
+            return a.raw > b.raw;
+        }
+        public static bool operator <(FixedStruct<Q> a, FixedStruct<Q> b)
+        {
+            return a.raw < b.raw;
         }
     }
 }
