@@ -5,39 +5,37 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Cuni.Arithmetics.FixedPointUnitTest
 {
     [TestClass]
-    public class Q8Test
+    public class StructQ24Test
     {
-        int a = 2;
-        int b = 32;
+        int a = 256;
+        int b = 1024;
 
         [TestMethod]
         public void CreationTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
+            var aFixed = new FixedStruct<Q24_8>(a);
             double doubleResult = (double)a;
             Assert.AreEqual(doubleResult.ToString(), aFixed.ToString());
         }
         [TestMethod]
         public void CreationFromTooLargeIntTest()
         {
-            var q = new Fixed<Q8_24>(256);
+            var q = new FixedStruct<Q24_8>(16777216);
             Assert.AreEqual("0", q.ToString());
         }
-
         [TestMethod]
         public void OverflowTest()
         {
-            var aFixed = new Fixed<Q8_24>(19);
-            var bFixed = new Fixed<Q8_24>(13);
+            var aFixed = new FixedStruct<Q24_8>(16777215);
+            var bFixed = new FixedStruct<Q24_8>(6);
             var result = aFixed.Multiply(bFixed);
-            Assert.AreEqual("-9", result.ToString());
+            Assert.AreEqual("-6", result.ToString());
         }
-
         [TestMethod]
         public void AdditionTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(b);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(b);
             var result = aFixed.Add(bFixed);
             double doubleResult = (double)a + (double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -46,8 +44,8 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void NegativeAdditionTest()
         {
-            var aFixed = new Fixed<Q8_24>(-a);
-            var bFixed = new Fixed<Q8_24>(-b);
+            var aFixed = new FixedStruct<Q24_8>(-a);
+            var bFixed = new FixedStruct<Q24_8>(-b);
             var result = aFixed.Add(bFixed);
             double doubleResult = -(double)a + -(double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -56,8 +54,8 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void SubtractionTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(b);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(b);
             var result = aFixed.Subtract(bFixed);
             double doubleResult = (double)a - (double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -66,8 +64,8 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void DivisionTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(b);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(b);
             var result = aFixed.Divide(bFixed);
             double doubleResult = (double)a / (double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -76,8 +74,8 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void NegativeDivisionTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(-b);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(-b);
             var result = aFixed.Divide(bFixed);
             double doubleResult = (double)a / -(double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -87,16 +85,16 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [ExpectedException(typeof(DivideByZeroException))]
         public void DivisionByZeroTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(0);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(0);
             var result = aFixed.Divide(bFixed);
         }
 
         [TestMethod]
         public void MultiplicationTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(b);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(b);
             var result = aFixed.Multiply(bFixed);
             double doubleResult = (double)a * (double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -105,8 +103,8 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void NegativeMultiplicationTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(-b);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(-b);
             var result = aFixed.Multiply(bFixed);
             double doubleResult = (double)a * -(double)b;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -115,8 +113,8 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void MultiplicationByZeroTest()
         {
-            var aFixed = new Fixed<Q8_24>(a);
-            var bFixed = new Fixed<Q8_24>(0);
+            var aFixed = new FixedStruct<Q24_8>(a);
+            var bFixed = new FixedStruct<Q24_8>(0);
             var result = aFixed.Multiply(bFixed);
             double doubleResult = (double)a * 0;
             Assert.AreEqual(doubleResult.ToString(), result.ToString());
@@ -126,7 +124,7 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         [TestMethod]
         public void ConversionToDoubleTest()
         {
-            var q = ((Fixed<Q8_24>)103) / 2;
+            var q = ((FixedStruct<Q24_8>) 103) / 2;
             double d = q;
             Assert.AreEqual(d.ToString(), q.ToString());
         }
@@ -135,15 +133,15 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         public void ConversionFromDoubleTest()
         {
             var d = 1.75;
-            var q = (Fixed<Q8_24>)d;
+            var q = (FixedStruct<Q24_8>)d;
             Assert.AreEqual(d.ToString(), q.ToString());
         }
 
         [TestMethod]
         public void ConversionFromMorePreciseDoubleTest()
         {
-            var d = Math.Pow(2, -25);
-            var q = (Fixed<Q8_24>)d;
+            var d = Math.Pow(2, -9);
+            var q = (FixedStruct<Q24_8>)d;
             Assert.AreNotEqual(d.ToString(), q.ToString());
             Assert.AreEqual(q.ToString(), "0");
         }
@@ -152,31 +150,32 @@ namespace Cuni.Arithmetics.FixedPointUnitTest
         public void ConversionFromIntTest()
         {
             var i = 125;
-            Fixed<Q8_24> q = i;
+            FixedStruct<Q24_8> q = i;
             Assert.AreEqual(i.ToString(), q.ToString());
         }
 
         [TestMethod]
         public void ConversionToIntTest()
         {
-            var q = ((Fixed<Q8_24>)103) / 2;
-            var i = 103 / 2;
+            var q = ((FixedStruct<Q24_8>)103) / 2;
+            var i = 103/2;
             Assert.AreEqual(i, (int)q);
         }
-        [TestMethod]
-        public void ConversionToQ24_8Test()
-        {
-            var original = new Fixed<Q8_24>(123);
-            original /= 2;
-            var converted = (Fixed<Q24_8>)original;
-            Assert.AreEqual(original.ToString(), converted.ToString());
-        }
+
         [TestMethod]
         public void ConversionToQ16_16Test()
         {
-            var original = new Fixed<Q8_24>(123);
+            var original = new FixedStruct<Q24_8>(123);
             original /= 2;
-            var converted = (Fixed<Q16_16>)original;
+            var converted = (FixedStruct<Q16_16>)original;
+            Assert.AreEqual(original.ToString(), converted.ToString());
+        }
+        [TestMethod]
+        public void ConversionToQ8_24Test()
+        {
+            var original = new FixedStruct<Q24_8>(123);
+            original /= 2;
+            var converted = (FixedStruct<Q8_24>)original;
             Assert.AreEqual(original.ToString(), converted.ToString());
         }
     }

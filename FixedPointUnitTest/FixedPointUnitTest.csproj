@@ -49,7 +49,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StructQ16Test.cs" />
+    <Compile Include="StructQ24Test.cs" />
+    <Compile Include="StructQ8Test.cs" />
+    <Compile Include="StructOperatorOverloadTest.cs" />
+    <Compile Include="StructExceptionTest.cs" />
     <Compile Include="ExceptionTest.cs" />
+    <Compile Include="OperatorOverloadTest.cs" />
     <Compile Include="Q8Test.cs" />
     <Compile Include="Q16Test.cs" />
     <Compile Include="Q24Test.cs" />
