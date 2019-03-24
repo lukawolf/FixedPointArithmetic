@@ -128,6 +128,12 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
         }
 
         [Benchmark]
+        public double DoubleDivisionTest()
+        {
+            return 123.4 / 432.1;
+        }
+
+        [Benchmark]
         public string ToStringTest()
         {
             return q8.ToString();
@@ -137,6 +143,18 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
         public string ToStringStructTest()
         {
             return q8Struct.ToString();
+        }
+
+        [Benchmark]
+        public Fixed<Q8_24> AbsTest()
+        {
+            return q8.Abs();
+        }
+
+        [Benchmark]
+        public FixedStruct<Q8_24> AbsStructTest()
+        {
+            return q8Struct.Abs();
         }
 
         [Benchmark]

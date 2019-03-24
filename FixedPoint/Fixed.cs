@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("FixedPointUnitTest")]
@@ -58,6 +59,7 @@ namespace Cuni.Arithmetics.FixedPoint
             return toReturn;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Fixed<Q> Abs()
         {
             var toReturn = new Fixed<Q>();
@@ -66,6 +68,7 @@ namespace Cuni.Arithmetics.FixedPoint
             return toReturn;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return ((double)this).ToString();
@@ -102,6 +105,7 @@ namespace Cuni.Arithmetics.FixedPoint
         }
 
         //Casts are explicit as we never know what Q is. Even more we will always loose eighter whole or decimal precision
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Fixed<Q24_8>(Fixed<Q> self)
         {
             var toReturn = new Fixed<Q24_8>();
@@ -113,6 +117,7 @@ namespace Cuni.Arithmetics.FixedPoint
 
             return toReturn;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Fixed<Q16_16>(Fixed<Q> self)
         {
             var toReturn = new Fixed<Q16_16>();
@@ -123,6 +128,7 @@ namespace Cuni.Arithmetics.FixedPoint
                 toReturn.raw = self.raw >> (-afterDotDifference);
             return toReturn;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Fixed<Q8_24>(Fixed<Q> self)
         {
             var toReturn = new Fixed<Q8_24>();
