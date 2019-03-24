@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CD71275E-7E8C-43DE-94C8-289309A8187D}</ProjectGuid>
+    <ProjectGuid>{F13FFB90-7DEA-4EC0-BEC8-87447E17B9C0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FixedPointApiTest</RootNamespace>
-    <AssemblyName>FixedPointApiTest</AssemblyName>
+    <RootNamespace>FixedPointBenchmark</RootNamespace>
+    <AssemblyName>FixedPointBenchmark</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BenchmarkDotNet, Version=0.11.4.0, Culture=neutral, PublicKeyToken=aa0ca2f9092cefc4, processorArchitecture=MSIL">
+      <HintPath>..\packages\BenchmarkDotNet.0.11.4\lib\netstandard2.0\BenchmarkDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="CommandLine, Version=2.4.3.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.4.3\lib\netstandard2.0\CommandLine.dll</HintPath>
     </Reference>
@@ -173,7 +176,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FixedPointApiTest.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -181,14 +184,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\FixedPoint\FixedPoint.csproj">
       <Project>{14326497-ebe5-4e68-bb9e-919c3b12d9ed}</Project>
       <Name>FixedPoint</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
