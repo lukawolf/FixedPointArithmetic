@@ -49,6 +49,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EqualityStructTest.cs" />
+    <Compile Include="EqualityTest.cs" />
     <Compile Include="StructQ16Test.cs" />
     <Compile Include="StructQ24Test.cs" />
     <Compile Include="StructQ8Test.cs" />

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace Cuni.Arithmetics.FixedPoint
 {
     [Obsolete("Fixed class is depreciated. Use FixedStruct instead!")]
-    public class Fixed<Q> where Q:IPrecision
+    public class Fixed<Q>:IEquatable<Fixed<Q>>, IComparable<Fixed<Q>> where Q:IPrecision
     {
         private int raw;
         private static readonly int one; 
@@ -172,6 +172,28 @@ namespace Cuni.Arithmetics.FixedPoint
         public static bool operator <(Fixed<Q> a, Fixed<Q> b)
         {
             return a.raw < b.raw;
+        }
+
+        //Third change of requirements:
+        public override int GetHashCode()
+        {
+            return raw;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Fixed<Q>) return ((Fixed<Q>)obj).raw == this.raw;
+
+            return false;
+        }
+        bool IEquatable<Fixed<Q>>.Equals(Fixed<Q> other)
+        {
+            return this.raw == other.raw;
+        }
+
+        int IComparable<Fixed<Q>>.CompareTo(Fixed<Q> other)
+        {
+            return this.raw - other.raw;
         }
     }
 }

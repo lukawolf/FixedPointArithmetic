@@ -18,6 +18,8 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
         readonly int n = 8;
         readonly Fixed<Q16_16>[][] fixedMatrix;
         readonly FixedStruct<Q16_16>[][] fixedStructMatrix;
+        readonly float[][] floatMatrix;
+        readonly double [][] doubleMatrix;       
         readonly Fixed<Q24_8> q24 = new Fixed<Q24_8>(101) / 2;
         readonly Fixed<Q16_16> q16 = new Fixed<Q16_16>(101) / 2;
         readonly Fixed<Q8_24> q8 = new Fixed<Q8_24>(101) / 2;
@@ -30,15 +32,21 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
             Random random = new Random();
             fixedMatrix = new Fixed<Q16_16>[n][];
             fixedStructMatrix = new FixedStruct<Q16_16>[n][];
+            floatMatrix = new float[n][];
+            doubleMatrix = new double[n][];
             for (int i = 0; i < n; i++)
             {
                 fixedMatrix[i] = new Fixed<Q16_16>[n];
                 fixedStructMatrix[i] = new FixedStruct<Q16_16>[n];
+                floatMatrix[i] = new float[n];
+                doubleMatrix[i] = new double[n];
                 for (int j = 0; j < n; j++)
                 {
                     int randomInt = random.Next(1, 15);
                     fixedMatrix[i][j] = randomInt;
                     fixedStructMatrix[i][j] = randomInt;
+                    floatMatrix[i][j] = randomInt;
+                    doubleMatrix[i][j] = randomInt;
                 }
             }
         }
@@ -219,6 +227,76 @@ namespace Cuni.Arithmetics.FixedPointBenchmark
                     fixedStructMatrix[i][col] = 0;
                     for (int j = col + 1; j < n; j++)
                         fixedStructMatrix[i][j] = fixedStructMatrix[i][j] - fixedStructMatrix[row][j] * f;
+                }
+
+                row++;
+                col++;
+            }
+        }
+
+        [Benchmark]
+        public void GaussFloatTest()
+        {
+            var row = 0;
+            var col = 0;
+            while (row < n && col < n)
+            {
+                var maxRow = row;
+                for (int i = row; i < n; i++)
+                    if (Math.Abs(floatMatrix[i][col]) > Math.Abs(floatMatrix[maxRow][col])) maxRow = i;
+
+                if (floatMatrix[maxRow][col] == 0)
+                {
+                    col++;
+                    continue;
+                }
+
+                var helperRow = floatMatrix[row];
+                floatMatrix[row] = floatMatrix[maxRow];
+                floatMatrix[maxRow] = helperRow;
+
+                /* Do for all rows below pivot: */
+                for (int i = row + 1; i < n; i++)
+                {
+                    var f = floatMatrix[i][col] / floatMatrix[row][col];
+                    floatMatrix[i][col] = 0;
+                    for (int j = col + 1; j < n; j++)
+                        floatMatrix[i][j] = floatMatrix[i][j] - floatMatrix[row][j] * f;
+                }
+
+                row++;
+                col++;
+            }
+        }
+
+        [Benchmark]
+        public void GaussDoubleTest()
+        {
+            var row = 0;
+            var col = 0;
+            while (row < n && col < n)
+            {
+                var maxRow = row;
+                for (int i = row; i < n; i++)
+                    if (Math.Abs(doubleMatrix[i][col]) > Math.Abs(doubleMatrix[maxRow][col])) maxRow = i;
+
+                if (doubleMatrix[maxRow][col] == 0)
+                {
+                    col++;
+                    continue;
+                }
+
+                var helperRow = doubleMatrix[row];
+                doubleMatrix[row] = doubleMatrix[maxRow];
+                doubleMatrix[maxRow] = helperRow;
+
+                /* Do for all rows below pivot: */
+                for (int i = row + 1; i < n; i++)
+                {
+                    var f = doubleMatrix[i][col] / doubleMatrix[row][col];
+                    doubleMatrix[i][col] = 0;
+                    for (int j = col + 1; j < n; j++)
+                        doubleMatrix[i][j] = doubleMatrix[i][j] - doubleMatrix[row][j] * f;
                 }
 
                 row++;

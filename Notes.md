@@ -71,27 +71,29 @@ Frequency=2156247 Hz, Resolution=463.7688 ns, Timer=TSC
 ```
 |                     Method |           Mean |       Error |      StdDev |         Median |
 |--------------------------- |---------------:|------------:|------------:|---------------:|
-|                 CreateTest |    292.6790 ns |   5.8923 ns |   7.6616 ns |    291.6981 ns |
-|           CreateStructTest |      0.0000 ns |   0.0000 ns |   0.0000 ns |      0.0000 ns |
-|                    AddTest |    282.7987 ns |   0.7371 ns |   0.6534 ns |    282.8814 ns |
-|              AddStructTest |      0.0000 ns |   0.0000 ns |   0.0000 ns |      0.0000 ns |
-|               SubtractTest |    287.2869 ns |   2.8596 ns |   2.6749 ns |    286.9826 ns |
+|                 CreateTest |    281.3968 ns |   0.2633 ns |   0.2334 ns |    281.3218 ns |
+|           CreateStructTest |      0.0158 ns |   0.0120 ns |   0.0106 ns |      0.0104 ns |
+|                    AddTest |    278.8529 ns |   0.5097 ns |   0.4519 ns |    278.6581 ns |
+|              AddStructTest |      0.0014 ns |   0.0027 ns |   0.0022 ns |      0.0000 ns |
+|               SubtractTest |    280.2603 ns |   1.3611 ns |   1.2066 ns |    279.7881 ns |
 |         SubtractStructTest |      0.0000 ns |   0.0000 ns |   0.0000 ns |      0.0000 ns |
-|               MultiplyTest |    288.2293 ns |   0.5722 ns |   0.5072 ns |    288.2374 ns |
-|         MultiplyStructTest |      8.8475 ns |   0.0762 ns |   0.0636 ns |      8.8493 ns |
-|                 DivideTest |    297.1124 ns |   3.9919 ns |   3.5387 ns |    295.2176 ns |
-|           DivideStructTest |     14.2278 ns |   0.1333 ns |   0.1247 ns |     14.2260 ns |
-|       ConvertPrecisionTest |      1.8830 ns |   0.1153 ns |   0.1022 ns |      1.8431 ns |
-| ConvertPrecisionStructTest |      0.0015 ns |   0.0061 ns |   0.0057 ns |      0.0000 ns |
-|             AddIntegerTest |    574.1834 ns |  10.2110 ns |   9.5514 ns |    574.5130 ns |
-|       AddIntegerStructTest |      0.0000 ns |   0.0000 ns |   0.0000 ns |      0.0000 ns |
+|               MultiplyTest |    288.3532 ns |   3.0508 ns |   2.7045 ns |    287.2582 ns |
+|         MultiplyStructTest |      8.7513 ns |   0.0156 ns |   0.0138 ns |      8.7475 ns |
+|                 DivideTest |    293.4669 ns |   1.4844 ns |   1.3159 ns |    293.0790 ns |
+|           DivideStructTest |     13.7662 ns |   0.0182 ns |   0.0170 ns |     13.7618 ns |
+|       ConvertPrecisionTest |      1.8395 ns |   0.0794 ns |   0.0663 ns |      1.8376 ns |
+| ConvertPrecisionStructTest |      0.0128 ns |   0.0012 ns |   0.0011 ns |      0.0132 ns |
+|             AddIntegerTest |    562.5470 ns |   6.7699 ns |   6.3326 ns |    559.1229 ns |
+|       AddIntegerStructTest |      0.0143 ns |   0.0012 ns |   0.0011 ns |      0.0143 ns |
 |         DoubleDivisionTest |      0.0000 ns |   0.0000 ns |   0.0000 ns |      0.0000 ns |
-|               ToStringTest |    194.9005 ns |   0.3883 ns |   0.3031 ns |    194.9359 ns |
-|         ToStringStructTest |    180.4324 ns |   0.2540 ns |   0.2121 ns |    180.4354 ns |
-|                    AbsTest |      2.0700 ns |   0.0472 ns |   0.0442 ns |      2.0856 ns |
-|              AbsStructTest |      0.2351 ns |   0.0085 ns |   0.0076 ns |      0.2342 ns |
-|                  GaussTest | 92,539.6232 ns | 190.0603 ns | 158.7090 ns | 92,586.5419 ns |
-|            GaussStructTest |    711.7595 ns |   8.1902 ns |   6.8392 ns |    710.9465 ns |
+|               ToStringTest |    196.2562 ns |   0.1959 ns |   0.1636 ns |    196.2553 ns |
+|         ToStringStructTest |    179.2702 ns |   0.0938 ns |   0.0784 ns |    179.2640 ns |
+|                    AbsTest |      1.8286 ns |   0.0982 ns |   0.0919 ns |      1.8457 ns |
+|              AbsStructTest |      0.2727 ns |   0.0021 ns |   0.0019 ns |      0.2726 ns |
+|                  GaussTest | 92,585.7367 ns | 442.7896 ns | 369.7494 ns | 92,623.9238 ns |
+|            GaussStructTest |    709.5328 ns |   3.8019 ns |   3.3703 ns |    708.8673 ns |
+|             GaussFloatTest |    496.1457 ns |   0.7358 ns |   0.6144 ns |    495.9207 ns |
+|            GaussDoubleTest |    507.2280 ns |   6.0729 ns |   5.6806 ns |    506.6910 ns |
 
 ##### Zero measurements
 In addition to already existing zero modifiers, the following appeared after aggressive inlining:
@@ -105,3 +107,5 @@ Aggressive inlining was tried for conversion methods, as their execution times w
 From the final result we can see, that aggressive inlining of the suspiciously long running methods worked in most cases. Only the ToString method itself takes way too long and we can see that this is not caused by the division (hidden in the conversion in code) itself. Thus I would suspect the implementation of Double.ToString. As the method is used only for user output, the problem is minimal.
 
 It is also apparent that using struct was the right way to go for fixed arithmetic numbers. The code speedup itself speaks for itself. As does the fact that the simplest of struct operations are measured as taking no time at all.
+
+As far as the benchmark results are concerned, I would prefer for my fixed point arithmetic to be faster than double. Yet in its implementation the fixed point operations (especially multiplication and division) are complicated enough to slow down execution even beyond floating point math. Still, this library should do better than software implementation of floating point numbers.

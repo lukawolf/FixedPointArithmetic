@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public struct FixedStruct<Q> where Q:IPrecision
+    public struct FixedStruct<Q>: IEquatable<FixedStruct<Q>>, IComparable<FixedStruct<Q>> where Q:IPrecision
     {
         private int raw;
         private static readonly int one; 
@@ -58,7 +58,7 @@ namespace Cuni.Arithmetics.FixedPoint
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FixedStruct<Q> Abs()
         {
-            var toReturn = new FixedStruct<Q>();
+            FixedStruct<Q> toReturn;
             toReturn.raw = raw;
             if (toReturn.raw < 0) toReturn.raw = -toReturn.raw;
             return toReturn;
@@ -168,6 +168,28 @@ namespace Cuni.Arithmetics.FixedPoint
         public static bool operator <(FixedStruct<Q> a, FixedStruct<Q> b)
         {
             return a.raw < b.raw;
+        }
+
+        //Third change of requirements:
+        public override int GetHashCode()
+        {
+            return raw;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FixedStruct<Q>) return ((FixedStruct<Q>)obj).raw == this.raw;
+
+            return false;
+        }
+        bool IEquatable<FixedStruct<Q>>.Equals(FixedStruct<Q> other)
+        {
+            return this.raw == other.raw;
+        }
+
+        int IComparable<FixedStruct<Q>>.CompareTo(FixedStruct<Q> other)
+        {
+            return this.raw - other.raw;
         }
     }
 }
